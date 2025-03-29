@@ -6,7 +6,7 @@ const Header = () => {
   };
 
   return (
-    <header className="flex justify-between items-center p-4 bg-gray-800 text-white">
+    <header className="flex justify-between items-center p-4 bg-[#27293D] text-white">
       <h1 className="text-xl font-bold cursor-pointer" onClick={handleRedirect}>
         TimePass Games
       </h1>
