@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { getGames } from "../../api";
 import GamesCard from "../../components/cards";
+import { useDebounce } from "../../hook/useDebbounce";
 
 const GameList = () => {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [refresh, setRefresh] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const debbouncedSearch = useDebounce(searchTerm, 500);
 
   useEffect(() => {
     try {
-      getGames().then((response) => {
+      getGames(debbouncedSearch).then((response) => {
         setGames(response);
       });
     } catch (err) {
@@ -18,7 +23,7 @@ const GameList = () => {
       setLoading(false);
     }
     setGames([]);
-  }, []);
+  }, [refresh, debbouncedSearch]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -30,12 +35,7 @@ const GameList = () => {
           type="text"
           placeholder="Search games..."
           onChange={(e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            setGames((prevGames) =>
-              prevGames.filter((game) =>
-                game.name.toLowerCase().includes(searchTerm)
-              )
-            );
+            setSearchTerm(e.target.value.toLocaleLowerCase());
           }}
           className="p-2 border-2 border-primary rounded-lg flex-1 text-lg"
         />
@@ -46,9 +46,9 @@ const GameList = () => {
           Create Game
         </button>
       </div>
-      <div className="flex flex-wrap gap-8 justify-between">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {games.map((game) => (
-          <GamesCard game={game} />
+          <GamesCard key={game.id} game={game} setRefresh={setRefresh} />
         ))}
       </div>
     </div>

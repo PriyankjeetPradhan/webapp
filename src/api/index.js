@@ -2,8 +2,9 @@ import axios from "axios";
 
 const API_URL = process.env.API_URL || "http://localhost:4000";
 const GAMES_ENDPOINT = `${API_URL}/games`;
-export const getGames = async () => {
-  const response = await axios.get(GAMES_ENDPOINT);
+export const getGames = async (query) => {
+  const url = query ? `${GAMES_ENDPOINT}?search=${query}` : GAMES_ENDPOINT;
+  const response = await axios.get(url);
   return response.data;
 };
 

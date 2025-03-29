@@ -1,14 +1,14 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { deleteGame } from "../../api";
 
-const GamesCard = ({ game }) => {
+const GamesCard = ({ game, setRefresh }) => {
   return (
     <div
       key={game.url}
-      className="border border-gray-300 rounded-lg w-60 text-center shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg bg-black flex flex-col"
+      className="border w-full border-gray-300 rounded-lg text-center shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg bg-black flex flex-col"
     >
-      {/* Image Section - Takes 3/5 of the space */}
       <div className="flex-3">
         <img
           src={game.url}
@@ -17,7 +17,6 @@ const GamesCard = ({ game }) => {
         />
       </div>
 
-      {/* Content Section - Takes 2/5 of the space */}
       <div className="flex-2 flex flex-col justify-between p-4 text-white">
         <div>
           <h3 className="text-lg font-semibold">{game.name}</h3>
@@ -27,7 +26,6 @@ const GamesCard = ({ game }) => {
           </p>
         </div>
 
-        {/* Buttons Section */}
         <div className="flex justify-between items-center mt-3">
           <a
             href={game.url}
@@ -39,7 +37,6 @@ const GamesCard = ({ game }) => {
           </a>
         </div>
 
-        {/* Edit & Delete Buttons */}
         <div className="flex justify-center space-x-4 mt-3 border-t border-gray-700 pt-2">
           <button
             className="text-blue-500 hover:text-blue-700"
@@ -49,7 +46,12 @@ const GamesCard = ({ game }) => {
           </button>
           <button
             className="text-red-500 hover:text-red-700"
-            onClick={() => console.log("Delete clicked for", game.name)}
+            onClick={() => {
+              console.log("Delete clicked for", game);
+              deleteGame(game.id).then((res) => {
+                setRefresh((prev) => !prev);
+              });
+            }}
           >
             <FontAwesomeIcon icon={faTrash} /> Delete
           </button>
