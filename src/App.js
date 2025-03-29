@@ -1,8 +1,12 @@
+import { BrowserRouter as Router } from "react-router-dom";
+import AppRoutes from "./AppRoutes";
 
 function App() {
   return (
     <div className="App">
-      <p className="text-xl"> Timepass games</p>
+      <Router>
+        <AppRoutes />
+      </Router>
     </div>
   );
 }
