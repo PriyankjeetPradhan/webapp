@@ -40,7 +40,7 @@ const GamesCard = ({ game, setRefresh }) => {
         <div className="flex justify-center space-x-4 mt-3 border-t border-gray-700 pt-2">
           <button
             className="text-blue-500 hover:text-blue-700"
-            onClick={() => console.log("Edit clicked for", game.name)}
+            onClick={() => (window.location.href = `/create/${game.id}`)}
           >
             <FontAwesomeIcon icon={faEdit} /> Edit
           </button>

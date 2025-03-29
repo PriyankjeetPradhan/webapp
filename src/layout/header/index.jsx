@@ -7,10 +7,13 @@ const Header = () => {
 
   return (
     <header className="flex justify-between items-center p-4 bg-[#27293D] text-white">
-      <h1 className="text-xl font-bold cursor-pointer" onClick={handleRedirect}>
-        TimePass Games
-      </h1>
-      <span className="text-lg">UserName</span>
+      <img
+        src="https://timepass.games/images/logo.png"
+        alt="Time Pass Logo"
+        className="h-10 cursor-pointer"
+        onClick={handleRedirect}
+      />
+      <span className="text-lg">Priyank012</span>
     </header>
   );
 };

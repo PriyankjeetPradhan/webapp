@@ -1,18 +1,42 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { createGame } from "../../api";
+import { createGame, getGameById, updateGame } from "../../api";
+import { useEffect } from "react";
+import { fetchGameById } from "../../api";
+import { useParams } from "react-router-dom";
 
-const CreateGame = () => {
+const CreateGame = ({ existingGame }) => {
+  const { id: gameId } = useParams();
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm({
+    defaultValues: existingGame || {},
+  });
 
   const [popupMessage, setPopupMessage] = useState("");
   const [popupVisible, setPopupVisible] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    if (gameId) {
+      getGameById(gameId)
+        .then((gameData) => {
+          reset({
+            name: gameData.name,
+            imageUrl: gameData.url,
+            authorName: gameData.author,
+            publishedDate: gameData.publishedDate.split("T")[0],
+          });
+        })
+        .catch((error) => {
+          showPopup("Error fetching game data. Please try again.", true);
+          console.error("Error fetching game data:", error);
+        });
+    }
+  }, []);
 
   const showPopup = (message, error = false) => {
     setPopupMessage(message);
@@ -24,20 +48,36 @@ const CreateGame = () => {
   };
 
   const onSubmit = (data) => {
-    createGame({
-      name: data.name,
-      url: data.imageUrl,
-      author: data.authorName,
-      publishedDate: data.publishedDate,
-    })
-      .then((response) => {
-        showPopup("Game created successfully!");
-        reset();
+    if (gameId) {
+      updateGame(gameId, {
+        name: data.name,
+        url: data.imageUrl,
+        author: data.authorName,
+        publishedDate: data.publishedDate,
       })
-      .catch((error) => {
-        showPopup("Error creating game. Please try again.", true);
-        console.error("Error creating game:", error);
-      });
+        .then(() => {
+          showPopup("Game updated successfully!");
+        })
+        .catch((error) => {
+          showPopup("Error updating game. Please try again.", true);
+          console.error("Error updating game:", error);
+        });
+    } else {
+      createGame({
+        name: data.name,
+        url: data.imageUrl,
+        author: data.authorName,
+        publishedDate: data.publishedDate,
+      })
+        .then(() => {
+          showPopup("Game created successfully!");
+          reset();
+        })
+        .catch((error) => {
+          showPopup("Error creating game. Please try again.", true);
+          console.error("Error creating game:", error);
+        });
+    }
   };
 
   return (
@@ -132,7 +172,7 @@ const CreateGame = () => {
           type="submit"
           className="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          Create Game
+          {gameId ? "Update Game" : "Create Game"}
         </button>
       </form>
     </div>

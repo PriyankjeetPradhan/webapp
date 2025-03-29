@@ -10,6 +10,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<GameList />} />
         <Route path="/create" element={<CreateGame />} />
+        <Route path="/create/:id" element={<CreateGame />} />
       </Routes>
     </Layout>
   );

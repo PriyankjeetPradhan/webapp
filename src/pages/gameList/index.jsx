@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getGames } from "../../api";
 import GamesCard from "../../components/cards";
 import { useDebounce } from "../../hook/useDebbounce";
+import CardSkeleton from "../../components/cardSkeleton";
 
 const GameList = () => {
   const [games, setGames] = useState([]);
@@ -14,6 +15,7 @@ const GameList = () => {
 
   useEffect(() => {
     try {
+      setLoading(true);
       getGames(debbouncedSearch).then((response) => {
         setGames(response);
       });
@@ -25,7 +27,14 @@ const GameList = () => {
     setGames([]);
   }, [refresh, debbouncedSearch]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-8">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <CardSkeleton />
+        ))}
+      </div>
+    );
   if (error) return <div>{error}</div>;
 
   return (
