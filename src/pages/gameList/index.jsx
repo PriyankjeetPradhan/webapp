@@ -3,6 +3,7 @@ import { getGames } from "../../api";
 import GamesCard from "../../components/cards";
 import { useDebounce } from "../../hook/useDebbounce";
 import CardSkeleton from "../../components/cardSkeleton";
+import { useNavigate } from "react-router-dom";
 
 const GameList = () => {
   const [games, setGames] = useState([]);
@@ -10,6 +11,7 @@ const GameList = () => {
   const [error, setError] = useState(null);
   const [refresh, setRefresh] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const debbouncedSearch = useDebounce(searchTerm, 500);
 
@@ -49,7 +51,7 @@ const GameList = () => {
           className="p-2 border-2 border-primary rounded-lg flex-1 text-lg"
         />
         <button
-          onClick={() => (window.location.href = "/create")}
+          onClick={() => navigate("/create")}
           className="p-2 px-4 bg-primary text-white rounded-lg text-lg transition duration-300 hover:bg-secondary"
         >
           Create Game

@@ -2,8 +2,11 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { deleteGame } from "../../api";
+import { useNavigate } from "react-router-dom";
 
 const GamesCard = ({ game, setRefresh }) => {
+  const navigate = useNavigate();
+
   return (
     <div
       key={game.url}
@@ -40,7 +43,7 @@ const GamesCard = ({ game, setRefresh }) => {
         <div className="flex justify-center space-x-4 mt-3 border-t border-gray-700 pt-2">
           <button
             className="text-blue-500 hover:text-blue-700"
-            onClick={() => (window.location.href = `/create/${game.id}`)}
+            onClick={() => navigate(`/create/${game.id}`)}
           >
             <FontAwesomeIcon icon={faEdit} /> Edit
           </button>
